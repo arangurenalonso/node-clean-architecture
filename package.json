@@ -1,0 +1,36 @@
+{
+  "name": "express-clean-architecture",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "clean": "rimraf dist cache",
+    "dev": "tsnd -r tsconfig-paths/register --respawn --clear src/app.ts",
+    "build": "npm run clean && tsc && tsc-alias -p tsconfig.json",
+    "start": "npm run build && node dist/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "rimraf": "^5.0.7",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "env-var": "^7.5.0",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "i": "^0.3.7",
+    "inversify": "^6.0.2",
+    "mediatr-ts": "^1.2.1",
+    "npm": "^10.8.1",
+    "reflect-metadata": "^0.2.2"
+  }
+}
