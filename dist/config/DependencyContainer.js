@@ -13,6 +13,7 @@ const express_1 = __importDefault(require("express"));
 const inversify_1 = require("inversify");
 const mediatr_ts_1 = require("mediatr-ts");
 const identifiers_1 = __importDefault(require("./identifiers"));
+const EnvironmentConfig_1 = __importDefault(require("./EnvironmentConfig"));
 class DependencyContainer {
     constructor() {
         this._container = new inversify_1.Container();
@@ -36,6 +37,9 @@ class DependencyContainer {
         this._container
             .bind(identifiers_1.default.Mediator)
             .toConstantValue(new mediatr_ts_1.Mediator());
+        this._container
+            .bind(identifiers_1.default.EnvironmentConfig)
+            .to(EnvironmentConfig_1.default);
     }
     bindControllers() {
         this._container

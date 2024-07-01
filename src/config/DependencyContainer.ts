@@ -11,6 +11,7 @@ import express, { Application, Router } from 'express';
 import { Container } from 'inversify';
 import { Mediator, IRequestHandler } from 'mediatr-ts';
 import TYPES from './identifiers';
+import EnvironmentConfig from './EnvironmentConfig';
 
 class DependencyContainer {
   private readonly _container: Container;
@@ -41,6 +42,9 @@ class DependencyContainer {
     this._container
       .bind<Mediator>(TYPES.Mediator)
       .toConstantValue(new Mediator());
+    this._container
+      .bind<EnvironmentConfig>(TYPES.EnvironmentConfig)
+      .to(EnvironmentConfig);
   }
 
   private bindControllers(): void {

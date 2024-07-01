@@ -27,7 +27,7 @@ let TodosController = class TodosController {
         this.register = this.register.bind(this);
     }
     async getAll(req, res) {
-        const query = new GetAllTodos_query_1.default();
+        const query = new GetAllTodos_query_1.default('Todo ID paso por parametro');
         const todos = await this._mediator.send(query);
         res.json(todos);
     }

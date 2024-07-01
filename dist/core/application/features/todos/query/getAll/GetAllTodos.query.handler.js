@@ -24,6 +24,7 @@ let GetAllTodosQueryHandler = class GetAllTodosQueryHandler {
         this._todoRepository = _todoRepository;
     }
     async handle(query) {
+        console.log('GetAllTodosQueryHandler', query);
         return await this._todoRepository.getAll();
     }
 };

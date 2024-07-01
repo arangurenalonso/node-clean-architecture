@@ -20,28 +20,30 @@ const path_1 = __importDefault(require("path"));
 const inversify_1 = require("inversify");
 const identifiers_1 = __importDefault(require("../../config/identifiers"));
 const api_router_1 = __importDefault(require("./routes/api.router"));
+const EnvironmentConfig_1 = __importDefault(require("../../config/EnvironmentConfig"));
 let ExpressServer = class ExpressServer {
-    constructor(app, apiRouter) {
-        this.app = app;
-        this.apiRouter = apiRouter;
+    constructor(_app, _apiRouter, _environmentConfig) {
+        this._app = _app;
+        this._apiRouter = _apiRouter;
+        this._environmentConfig = _environmentConfig;
         this.initializeMiddlewares();
         this.initializeRoutes();
     }
     initializeMiddlewares() {
-        this.app.use(express_1.default.json());
-        this.app.use(express_1.default.urlencoded({ extended: true }));
-        this.app.use(express_1.default.static('public'));
+        this._app.use(express_1.default.json());
+        this._app.use(express_1.default.urlencoded({ extended: true }));
+        this._app.use(express_1.default.static(this._environmentConfig.publicPath));
     }
     initializeRoutes() {
-        this.app.use('/api', this.apiRouter.router);
-        this.app.get('*', (req, res) => {
-            const indexPath = path_1.default.join(__dirname, `../../${'public'}`, 'index.html');
+        this._app.use('/api', this._apiRouter.router);
+        this._app.get('*', (req, res) => {
+            const indexPath = path_1.default.join(__dirname, `../../${this._environmentConfig.publicPath}`, 'index.html');
             res.sendFile(indexPath);
         });
     }
     async start() {
-        this.app.listen(3000, () => {
-            console.log(`Server running at ${3000}`);
+        this._app.listen(this._environmentConfig.port, () => {
+            console.log(`Server running at ${this._environmentConfig.port}`);
         });
     }
 };
@@ -49,6 +51,8 @@ ExpressServer = __decorate([
     (0, inversify_1.injectable)(),
     __param(0, (0, inversify_1.inject)(identifiers_1.default.Application)),
     __param(1, (0, inversify_1.inject)(identifiers_1.default.ApiRouter)),
-    __metadata("design:paramtypes", [Function, api_router_1.default])
+    __param(2, (0, inversify_1.inject)(identifiers_1.default.EnvironmentConfig)),
+    __metadata("design:paramtypes", [Function, api_router_1.default,
+        EnvironmentConfig_1.default])
 ], ExpressServer);
 exports.default = ExpressServer;

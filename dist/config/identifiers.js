@@ -9,5 +9,6 @@ const TYPES = {
     Router: Symbol.for('Router'),
     Mediator: Symbol.for('Mediator'),
     ITodoRepository: Symbol.for('ITodoRepository'),
+    EnvironmentConfig: Symbol.for('EnvironmentConfig'),
 };
 exports.default = TYPES;

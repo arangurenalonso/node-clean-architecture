@@ -3,34 +3,41 @@ import path from 'path';
 import { inject, injectable } from 'inversify';
 import TYPES from '@config/identifiers';
 import ApiRouter from './routes/api.router';
+import EnvironmentConfig from '@config/EnvironmentConfig';
 
 @injectable()
 class ExpressServer {
   constructor(
-    @inject(TYPES.Application) private readonly app: Application,
-    @inject(TYPES.ApiRouter) private readonly apiRouter: ApiRouter
+    @inject(TYPES.Application) private readonly _app: Application,
+    @inject(TYPES.ApiRouter) private readonly _apiRouter: ApiRouter,
+    @inject(TYPES.EnvironmentConfig)
+    private readonly _environmentConfig: EnvironmentConfig
   ) {
     this.initializeMiddlewares();
     this.initializeRoutes();
   }
 
   private initializeMiddlewares() {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(express.static('public'));
+    this._app.use(express.json());
+    this._app.use(express.urlencoded({ extended: true }));
+    this._app.use(express.static(this._environmentConfig.publicPath));
   }
 
   private initializeRoutes() {
-    this.app.use('/api', this.apiRouter.router);
+    this._app.use('/api', this._apiRouter.router);
 
-    this.app.get('*', (req, res) => {
-      const indexPath = path.join(__dirname, `../../${'public'}`, 'index.html');
+    this._app.get('*', (req, res) => {
+      const indexPath = path.join(
+        __dirname,
+        `../../${this._environmentConfig.publicPath}`,
+        'index.html'
+      );
       res.sendFile(indexPath);
     });
   }
   public async start(): Promise<void> {
-    this.app.listen(3000, () => {
-      console.log(`Server running at ${3000}`);
+    this._app.listen(this._environmentConfig.port, () => {
+      console.log(`Server running at ${this._environmentConfig.port}`);
     });
   }
 }
